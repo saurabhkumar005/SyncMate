@@ -1,0 +1,52 @@
+# =========================
+# BACKEND DEPENDENCIES
+# =========================
+node_modules/
+
+# =========================
+# BACKEND ENVIRONMENT VARIABLES
+# =========================
+# CRITICAL: Contains DB passwords, JWT Secrets, Cloudinary API Keys
+.env
+.env*.local
+
+# =========================
+# TEMPORARY UPLOADS (Multer)
+# =========================
+# Do not commit user-uploaded files to GitHub. 
+# These should be processed and sent to Cloudinary, then deleted locally.
+uploads/
+temp/
+public/uploads/
+
+# =========================
+# DATABASE & PRISMA
+# =========================
+# Ignore local SQLite databases (if used for quick local testing)
+*.db
+*.db-journal
+# (Optional) Ignore Prisma client if you are generating it dynamically in CI/CD
+# /prisma/client
+
+# =========================
+# SERVER LOGS
+# =========================
+# If you use Winston or Morgan to write error logs to the server's hard drive
+logs/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+# OS & IDE FILES
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# TESTING
+# =========================
+coverage/
+.nyc_output/
