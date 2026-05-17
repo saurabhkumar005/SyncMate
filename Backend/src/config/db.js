@@ -18,7 +18,7 @@ const connectDBPool = ()=>{
         waitForConnections: true,  //pool will allow request's wait for connection if no connection is free right now 
         connectionLimit: 20, //max number of already  availble connection ready to handle DB operation directly in pool , 
         // means that much only request can be hanled at single time, after that any request had to wait to get any connection free
-        queueLimit: 20 //value 0 means, infinite , means any number of connection can wait in queue which may cause buffer full and other issue which may results in crash.
+        queueLimit: 0 //value 0 means, infinite , means any number of connection can wait in queue which may cause buffer full and other issue which may results in crash.
     });
     console.log("DB Connected Successfully!")
 };
