@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-const connectDBPool = ()=>{
+const connectionPool = ()=>{
     //we are not creating a single DB connection as it will make new single connection always whenever any request come to sql. 
     // every new DB connection does a TCP handshake which takes time and slows the app , better approach is to create pool 
     // of connection, so if any request come to sql, it will have already set of some available DB connection with TCP handhake done and 
@@ -23,4 +23,4 @@ const connectDBPool = ()=>{
     console.log("DB Connected Successfully!")
 };
 
-export default connectDBPool;
+export default connectionPool;
