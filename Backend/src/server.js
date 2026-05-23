@@ -3,17 +3,16 @@ import app from "./app.js";
 import http from 'http';
 import { Server } from "socket.io";
 import dotenv from "dotenv";
-import socketSetup from "./Socket/socket.js";
+
+import {initSocket} from './socket/socket.js';
+import {setupSocketHandlers} from './socket/socketHandler.js';
 
 dotenv.config()
 const server = http.createServer(app); //wrapping app with http server to joint with socket
 
-export const io = new Server(server, {
-    cors: {origin: "*"},
-});
+const io = initSocket(server);
 
-socketSetup(io);
-
+setupSocketHandlers(io);
 
 
 
