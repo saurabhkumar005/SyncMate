@@ -14,3 +14,36 @@ CREATE TABLE IF NOT EXISTS users(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE IF NOT EXISTS conversations(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type ENUM('direct', 'group') NOT NULL DEFAULT 'direct',
+    group_name VARCHAR(60) ,
+    group_avatar TEXT,
+    created_by INT,
+    last_message_id INT ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS conversation_participants(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    conversation_id INT NOT NULL,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    role ENUM('admin', 'co_admin', 'member') DEFAULT 'member',
+    UNIQUE(user_id, conversation_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS messages(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    sender_id INT NOT NULL,
+    conversation_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message_type  ENUM('text', 'image', 'video', 'file', 'system') DEFAULT 'text',
+    FOREIGN KEY (sender_id) REFERENCES users(id),
+    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+);

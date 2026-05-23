@@ -11,25 +11,34 @@ async function createUser(userData){
 }
 
 export const findUserIdByEmail = async (email)=>{
-    const result = await connectionPool.execute(
+    const [rows] = await connectionPool.execute(
         `SELECT id from users where email = ?`
         ,[email]
     );
-    return result[0];
+    return rows[0];
 }
 
 export const findUserIdByUsername = async (username)=>{
     const query = `SELECT id from users where username = ?`;
-    const result = await connectionPool.execute(query, [username]);
-    return result[0];
+    const [rows] = await connectionPool.execute(query, [username]);
+    return rows[0];
 }
 
 
 
 export const findAuthUserData = (identifier)=>{
     const query = "select * from users where username = ? OR email = ?";
-    const result = await connectionPool.execute(query, [identifier, identifier]);
-    return result[0];
+    const [rows] = await connectionPool.execute(query, [identifier, identifier]);
+    return rows[0];
+};
+
+export const findUserById = (userId)=>{
+    const query = "SELECT id, username, email, phone_number, full_name, avatar_url, profession from users where id=?";
+    //.execute() return [rows(can be more than 1), metadata];
+    //rows is list of objects , object is all user rows that mysql2 return acccroding to your sql code, can be 1 or more thnan 1
+
+    const [rows] = connectionPool.execute(query,userId);
+    return rows[0];
 };
 
 export {createUser};

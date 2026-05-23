@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import AppError from '../../utils/AppError.js';
 import { generateToken, verifyToken } from '../../utils/jwt.js';
 
-import {createUser, findUserIdByEmail, findUserIdByUsername, findAuthUserData} from './auth.repository.js'
+import {createUser, findUserIdByEmail, findUserIdByUsername, findAuthUserData, findUserById} from './auth.repository.js'
 
 
 
@@ -95,3 +95,21 @@ export const loginUserService = async (userData)=>{
 
 };
 
+
+
+
+
+export const getCurrentUserService = async(user)=>{
+    if(!user){
+        throw new AppError("Unauthorized Access! Login please.",404);
+    }
+    const userId = user.userId;
+    if(!userId){
+        throw new AppError("Unauthorized Access! Login please.",404);
+    }
+    const userData = await findUserById(userId);
+    if(!userData){
+          throw new AppError("Unauthorized Access! Login please.",404);
+    }
+    return userData;
+};
