@@ -26,13 +26,13 @@ export const findUserIdByUsername = async (username)=>{
 
 
 
-export const findAuthUserData = (identifier)=>{
+export const findAuthUserData = async(identifier)=>{
     const query = "select * from users where username = ? OR email = ?";
     const [rows] = await connectionPool.execute(query, [identifier, identifier]);
     return rows[0];
 };
 
-export const findUserById = (userId)=>{
+export const findUserById = async(userId)=>{
     const query = "SELECT id, username, email, phone_number, full_name, avatar_url, profession from users where id=?";
     //.execute() return [rows(can be more than 1), metadata];
     //rows is list of objects , object is all user rows that mysql2 return acccroding to your sql code, can be 1 or more thnan 1

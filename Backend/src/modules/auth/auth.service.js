@@ -10,8 +10,8 @@ import {createUser, findUserIdByEmail, findUserIdByUsername, findAuthUserData, f
 export const registerUserService = async(userData)=>{
     const {full_name, username, password, email, phone_number, avatar_url, profession} = userData;
 
-    if(!username || !full_name || !email || !phone_number ||!password){
-        throw new AppError("Please fill all required field (Name, Username, Email, Password, Phone Number) to register!", 400);
+    if(!username || !full_name || !email ||!password){
+        throw new AppError("Please fill all required field (Name, Username, Email, Password) to register!", 400);
 
     }
     
@@ -41,9 +41,9 @@ export const registerUserService = async(userData)=>{
     //more round = more time = slow = hard for hacker to try random million password guess
     //bcrypt.genSalt() = bcrypt.genSalt(10)by defult if you not pass work factor, 10 will be taken
     const hashedPassword = await bcrypt.hash(password, salt);
-    const data={full_name : normalizedFullName, username: normalizedUsername, email : normalizedEmail, phone_number,
+    const data={full_name : normalizedFullName, username: normalizedUsername, email : normalizedEmail, phone_number:null,
         password : hashedPassword,
-        profession, avatar_url
+        profession:null, avatar_url:null
     };
     const createdUser = await createUser(data);
     const token = generateToken({userId: createdUser.id });

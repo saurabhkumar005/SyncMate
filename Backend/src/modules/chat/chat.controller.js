@@ -1,4 +1,4 @@
-import { createDirectConversationService, sendMessageController, 
+import { createDirectConversationService, sendMessageService, 
     getConversationMessagesService , getUserConversationsService
 } from "./chat.service.js";
 
