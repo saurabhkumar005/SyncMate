@@ -15,6 +15,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      PORT: ${{ secrets.PORT }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+
+      DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
+
     steps:
 
       - name: Checkout Repository
