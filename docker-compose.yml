@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  frontend:
+    build: ./Frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    env_file:
+      - ./Frontend/.env
+    volumes:
+      - ./Frontend:/app
+
+  backend:
+    build: ./Backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./Backend/.env.docker
+    environment:
+      DB_HOST: mysql
+    depends_on:
+      - mysql
+    volumes:
+      - ./Backend:./app
+  
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./Backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql_data:
