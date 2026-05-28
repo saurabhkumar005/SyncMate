@@ -22,7 +22,8 @@ export const createDirectConversationService = async(currentUserId, targetUserId
 
     const existingConversation = await findExistingDirectConversation(currentUserId, targetUserId);
     if(existingConversation){
-        return existingConversation;
+        // Normalize: SQL returns { conversation_id } but we always return { id }
+        return { id: existingConversation.conversation_id || existingConversation.id };
     }
 
     const connection = await connectionPool.getConnection();

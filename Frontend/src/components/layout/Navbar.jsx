@@ -12,18 +12,7 @@ import { useChatContext } from '../../context/ChatContext.jsx';
 import UserAvatar from '../ui/UserAvatar.jsx';
 
 const NAV_ITEMS = [
-  { id: 'home',        label: 'Home',         icon: Home,           path: '/' },
-  { id: 'rooms',       label: 'Rooms',        icon: Users,          path: '/rooms' },
   { id: 'messages',    label: 'Messages',     icon: MessageCircle,  path: '/chat',    badge: true },
-  { id: 'tasks',       label: 'Tasks',        icon: CheckSquare,    path: '/tasks' },
-  { id: 'calendar',    label: 'Calendar',     icon: Calendar,       path: '/calendar' },
-  { id: 'quizzes',     label: 'Quizzes',      icon: BookOpen,       path: '/quizzes' },
-  { id: 'notes',       label: 'Notes',        icon: FileText,       path: '/notes' },
-  { id: 'timer',       label: 'Study Timer',  icon: Timer,          path: '/timer' },
-  { id: 'resources',   label: 'Resources',    icon: FolderOpen,     path: '/resources' },
-  { id: 'people',      label: 'People',       icon: User2,          path: '/people' },
-  { id: 'leaderboard', label: 'Leaderboard',  icon: Trophy,         path: '/leaderboard' },
-  { id: 'settings',    label: 'Settings',     icon: Settings,       path: '/settings' },
 ];
 
 export default function Navbar({ isMobileOpen, onMobileClose }) {
@@ -45,7 +34,7 @@ export default function Navbar({ isMobileOpen, onMobileClose }) {
   };
 
   const isActive = (path) => {
-    if (path === '/') return location.pathname === '/';
+    if (path === '/') return location.pathname === '/chat' || location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 
@@ -93,9 +82,9 @@ export default function Navbar({ isMobileOpen, onMobileClose }) {
 
         {/* Navigation */}
         <div className="navbar-nav">
-          <div className="nav-section-label">Main</div>
+          <div className="nav-section-label" style={{ opacity: expanded ? 1 : 0, transition: 'opacity 0.2s' }}>Chat Application</div>
 
-          {NAV_ITEMS.slice(0, 3).map(({ id, label, icon: Icon, path, badge }) => (
+          {NAV_ITEMS.map(({ id, label, icon: Icon, path, badge }) => (
             <button
               key={id}
               className={`nav-item ${isActive(path) ? 'active' : ''}`}
@@ -110,40 +99,6 @@ export default function Navbar({ isMobileOpen, onMobileClose }) {
               {badge && totalUnread > 0 && (
                 <span className="nav-badge">{totalUnread > 99 ? '99+' : totalUnread}</span>
               )}
-            </button>
-          ))}
-
-          <div className="nav-section-label">Productivity</div>
-
-          {NAV_ITEMS.slice(3, 9).map(({ id, label, icon: Icon, path }) => (
-            <button
-              key={id}
-              className={`nav-item ${isActive(path) ? 'active' : ''}`}
-              onClick={() => handleNavClick(path)}
-              title={!expanded ? label : undefined}
-              aria-label={label}
-            >
-              <span className="nav-icon">
-                <Icon size={18} strokeWidth={1.8} />
-              </span>
-              <span className="nav-label">{label}</span>
-            </button>
-          ))}
-
-          <div className="nav-section-label">Community</div>
-
-          {NAV_ITEMS.slice(9).map(({ id, label, icon: Icon, path }) => (
-            <button
-              key={id}
-              className={`nav-item ${isActive(path) ? 'active' : ''}`}
-              onClick={() => handleNavClick(path)}
-              title={!expanded ? label : undefined}
-              aria-label={label}
-            >
-              <span className="nav-icon">
-                <Icon size={18} strokeWidth={1.8} />
-              </span>
-              <span className="nav-label">{label}</span>
             </button>
           ))}
         </div>

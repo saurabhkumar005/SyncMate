@@ -37,7 +37,7 @@ export const findUserById = async(userId)=>{
     //.execute() return [rows(can be more than 1), metadata];
     //rows is list of objects , object is all user rows that mysql2 return acccroding to your sql code, can be 1 or more thnan 1
 
-    const [rows] = connectionPool.execute(query,userId);
+    const [rows] = await connectionPool.execute(query, [userId]);
     return rows[0];
 };
 

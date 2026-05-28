@@ -177,6 +177,7 @@ body {
 ============================================ */
 .auth-page {
   min-height: 100dvh;
+  width: 100%;
   background: linear-gradient(135deg, #fdfaf6 0%, #fef9f0 40%, #fff8f0 100%);
   display: flex;
   align-items: center;
@@ -214,11 +215,94 @@ body {
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--border-subtle);
-  padding: 2.5rem;
+  padding: 2rem;
   width: 100%;
-  max-width: 420px;
+  max-width: 860px;
   position: relative;
   z-index: 1;
+}
+
+.auth-card .auth-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.auth-aside {
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.14), rgba(251, 146, 60, 0.08));
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.auth-aside h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: #3b3229;
+}
+
+.auth-aside p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.auth-highlight {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(251, 146, 60, 0.12);
+  color: #c2510a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.auth-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.auth-benefit span {
+  min-width: 10px;
+  height: 10px;
+  margin-top: 0.45rem;
+  border-radius: 999px;
+  background: #f97316;
+}
+
+.auth-note {
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-lg);
+  background: rgba(249, 115, 22, 0.08);
+  color: #7c3a0e;
+  font-size: 0.9rem;
+}
+
+.auth-form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 1.5rem;
+  }
+
+  .auth-card > .auth-panel {
+    gap: 1.5rem;
+  }
 }
 
 /* ============================================
@@ -226,7 +310,7 @@ body {
 ============================================ */
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--warm-white);
@@ -884,11 +968,13 @@ body {
 .messages-area {
   flex: 1;
   overflow-y: auto;
-  padding: 1.25rem;
+  padding: 0.5rem 0 0.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0;
+  background: #f5f1eb;
 }
+
 
 .date-divider {
   display: flex;
@@ -1507,6 +1593,12 @@ body {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
 
 .modal-card {
   background: white;

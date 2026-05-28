@@ -65,7 +65,7 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <Navigate to="/chat" replace />
             </ProtectedRoute>
           }
         />

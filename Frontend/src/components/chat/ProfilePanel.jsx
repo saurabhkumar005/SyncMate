@@ -32,7 +32,7 @@ export default function ProfilePanel({ isOpen, onClose }) {
   const { selectedConversation, currentUserId } = useChatContext();
 
   const otherParticipant = selectedConversation?.participants?.find(
-    (p) => p.id !== currentUserId
+    (p) => Number(p.id) !== Number(currentUserId)
   );
 
   const displayUser = otherParticipant || {

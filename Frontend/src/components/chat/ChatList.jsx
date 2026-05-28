@@ -6,12 +6,14 @@ import { AuthContext } from '../../context/AuthContext.jsx';
 import UserAvatar from '../ui/UserAvatar.jsx';
 import { formatTime } from '../../utils/helpers.js';
 import EmptyState from '../ui/EmptyState.jsx';
+import NewChatModal from './NewChatModal.jsx';
 
-const FILTERS = ['All', 'Unread', 'Groups', 'Mentions'];
+const FILTERS = ['All', 'Unread', 'Groups'];
 
 export default function ChatList({ onSelectConversation }) {
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isNewChatOpen, setIsNewChatOpen] = useState(false);
   const { conversations, selectedConversationId, selectConversation, unreadCounts, loading } =
     useChatContext();
   const { user } = useContext(AuthContext);
@@ -21,23 +23,33 @@ export default function ChatList({ onSelectConversation }) {
     [unreadCounts]
   );
 
+  // Helper to derive display name for search
+  const getDisplayName = (conv) => {
+    if (conv.type === 'group') return conv.group_name || '';
+    if (conv.participants && Array.isArray(conv.participants)) {
+      const other = conv.participants.find(p => Number(p.id) !== Number(user?.id));
+      return (other?.full_name || other?.username || '');
+    }
+    return '';
+  };
+
   const filtered = useMemo(() => {
     let list = conversations;
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
         (c) =>
-          c.name?.toLowerCase().includes(q) ||
+          getDisplayName(c).toLowerCase().includes(q) ||
           c.last_message?.toLowerCase().includes(q)
       );
     }
     if (activeFilter === 'Unread') {
-      list = list.filter((c) => (unreadCounts[c.id] || 0) > 0);
+      list = list.filter((c) => (unreadCounts[Number(c.id)] || 0) > 0);
     } else if (activeFilter === 'Groups') {
       list = list.filter((c) => c.type === 'group');
     }
     return list;
-  }, [conversations, search, activeFilter, unreadCounts]);
+  }, [conversations, search, activeFilter, unreadCounts, user]);
 
   const handleSelect = (id) => {
     selectConversation(id);
@@ -45,17 +57,17 @@ export default function ChatList({ onSelectConversation }) {
   };
 
   const getConversationName = (conv) => {
-    if (conv.name) return conv.name;
-    if (conv.type === 'direct' && conv.participants) {
-      const other = conv.participants.find((p) => p.id !== user?.id);
-      return other?.name || other?.username || 'Direct Message';
+    if (conv.type === 'group') return conv.group_name || `Group ${conv.id}`;
+    if (conv.participants && Array.isArray(conv.participants)) {
+      const other = conv.participants.find(p => Number(p.id) !== Number(user?.id));
+      return other?.full_name || other?.username || `Chat ${conv.id}`;
     }
-    return `Conversation ${conv.id}`;
+    return `Chat ${conv.id}`;
   };
 
   const getConversationUser = (conv) => {
-    if (conv.type === 'direct' && conv.participants) {
-      return conv.participants.find((p) => p.id !== user?.id);
+    if (conv.participants && Array.isArray(conv.participants)) {
+      return conv.participants.find(p => Number(p.id) !== Number(user?.id));
     }
     return null;
   };
@@ -72,7 +84,7 @@ export default function ChatList({ onSelectConversation }) {
             <button className="icon-btn" aria-label="Filter options" title="Filter">
               <SlidersHorizontal size={16} strokeWidth={1.8} />
             </button>
-            <button className="icon-btn" aria-label="New message" title="New conversation">
+            <button className="icon-btn" aria-label="New message" title="New conversation" onClick={() => setIsNewChatOpen(true)}>
               <SquarePen size={16} strokeWidth={1.8} />
             </button>
           </div>
@@ -129,8 +141,8 @@ export default function ChatList({ onSelectConversation }) {
           const name = getConversationName(conv);
           const otherUser = getConversationUser(conv);
           const group = isGroup(conv);
-          const unread = unreadCounts[conv.id] || 0;
-          const isSelected = conv.id === selectedConversationId;
+          const unread = unreadCounts[Number(conv.id)] || 0;
+          const isSelected = Number(conv.id) === Number(selectedConversationId);
 
           return (
             <div
@@ -166,8 +178,6 @@ export default function ChatList({ onSelectConversation }) {
                 <UserAvatar
                   user={otherUser || { name }}
                   size="sm"
-                  showStatus
-                  status={otherUser?.isOnline ? 'online' : 'offline'}
                   className=""
                 />
               )}
@@ -204,6 +214,8 @@ export default function ChatList({ onSelectConversation }) {
           );
         })}
       </div>
+
+      <NewChatModal isOpen={isNewChatOpen} onClose={() => setIsNewChatOpen(false)} />
     </aside>
   );
 }

@@ -1,13 +1,13 @@
-// src/pages/Register.jsx
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Flame, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Flame, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { registerUser } from '../api/auth.api.js';
 
 export default function Register() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  // Backend requires full_name, username, email, password
   const [form, setForm] = useState({ full_name: '', username: '', email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,20 +21,20 @@ export default function Register() {
   const passwordStrength = () => {
     const p = form.password;
     if (p.length === 0) return null;
-    if (p.length < 6) return { level: 'weak', color: '#ef4444', label: 'Weak' };
-    if (p.length < 10) return { level: 'medium', color: '#f59e0b', label: 'Medium' };
-    return { level: 'strong', color: '#22c55e', label: 'Strong' };
+    if (p.length < 6) return { level: 'weak', color: 'bg-red-500', text: 'text-red-500', label: 'Weak' };
+    if (p.length < 10) return { level: 'medium', color: 'bg-amber-500', text: 'text-amber-500', label: 'Medium' };
+    return { level: 'strong', color: 'bg-green-500', text: 'text-green-500', label: 'Strong' };
   };
   const strength = passwordStrength();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.full_name || !form.email || !form.password) {
+    if (!form.full_name || !form.username || !form.email || !form.password) {
       setError('Please fill in all required fields.');
       return;
     }
-    if (form.password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
     setLoading(true);
@@ -44,7 +44,7 @@ export default function Register() {
       navigate('/chat');
     } catch (err) {
       setError(
-        err?.response?.data?.message || err?.response?.data?.error || 'Registration failed. Please try again.'
+        err?.response?.data?.error || err?.response?.data?.message || 'Registration failed. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -53,198 +53,181 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card" style={{ maxWidth: 460 }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          <div className="navbar-logo" style={{ width: 44, height: 44, borderRadius: 12, fontSize: '1.1rem' }}>
-            <Flame size={22} strokeWidth={2.5} />
-          </div>
-          <div>
-            <h1 style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 800,
-              fontSize: '1.35rem',
-              color: 'var(--text-primary)',
-              lineHeight: 1.2,
-            }}>
-              SyncMate
-            </h1>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Collaborate · Learn · Grow
-            </p>
-          </div>
-        </div>
-
-        <h2 style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontWeight: 700,
-          fontSize: '1.2rem',
-          color: 'var(--text-primary)',
-          marginBottom: '0.25rem',
-        }}>
-          Create your account ✨
-        </h2>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-          Join thousands of students & developers on SyncMate
-        </p>
-
-        {error && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.75rem 1rem',
-            background: 'rgba(239,68,68,0.06)',
-            border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: 'var(--radius-md)',
-            marginBottom: '1rem',
-            color: '#dc2626',
-            fontSize: '0.85rem',
-          }}>
-            <AlertCircle size={15} />
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Name */}
-          <div style={{ marginBottom: '0.85rem' }}>
-            <label htmlFor="reg-name" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
-              Full Name <span style={{ color: '#ef4444' }}>*</span>
-            </label>
-            <div style={{ position: 'relative' }}>
-              <User size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--warm-gray-400)' }} />
-              <input
-                id="reg-name"
-                name="full_name"
-                type="text"
-                className="form-input"
-                placeholder="Alex Morgan"
-                value={form.name}
-                onChange={handleChange}
-                autoComplete="name"
-                style={{ paddingLeft: '2.5rem' }}
-              />
+      <div className="auth-card">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr]">
+          <section className="auth-aside">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="auth-highlight">New account</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-saffron-500 to-saffron-600 flex items-center justify-center text-white shadow-saffron">
+                <Flame size={24} strokeWidth={2.5} />
+              </div>
             </div>
-          </div>
 
-          {/* Username */}
-          <div style={{ marginBottom: '0.85rem' }}>
-            <label htmlFor="reg-username" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
-              Username
-            </label>
-            <div style={{ position: 'relative' }}>
-              <span style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--warm-gray-400)', fontSize: '0.9rem' }}>@</span>
-              <input
-                id="reg-username"
-                name="username"
-                type="text"
-                className="form-input"
-                placeholder="alexmorgan"
-                value={form.username}
-                onChange={handleChange}
-                autoComplete="username"
-                style={{ paddingLeft: '2rem' }}
-              />
+            <div>
+              <h3>Create your SyncMate workspace</h3>
+              <p>Build study groups, share ideas, and chat with your team in one polished workspace designed for learners.
+              </p>
             </div>
-          </div>
 
-          {/* Email */}
-          <div style={{ marginBottom: '0.85rem' }}>
-            <label htmlFor="reg-email" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
-              Email <span style={{ color: '#ef4444' }}>*</span>
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Mail size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--warm-gray-400)' }} />
-              <input
-                id="reg-email"
-                name="email"
-                type="email"
-                className="form-input"
-                placeholder="you@example.com"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="email"
-                style={{ paddingLeft: '2.5rem' }}
-              />
-            </div>
-          </div>
-
-          {/* Password */}
-          <div style={{ marginBottom: '1.25rem' }}>
-            <label htmlFor="reg-password" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
-              Password <span style={{ color: '#ef4444' }}>*</span>
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--warm-gray-400)' }} />
-              <input
-                id="reg-password"
-                name="password"
-                type={showPass ? 'text' : 'password'}
-                className="form-input"
-                placeholder="Min 6 characters"
-                value={form.password}
-                onChange={handleChange}
-                autoComplete="new-password"
-                style={{ paddingLeft: '2.5rem', paddingRight: '2.75rem' }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPass(!showPass)}
-                style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--warm-gray-400)', display: 'flex' }}
-                aria-label={showPass ? 'Hide password' : 'Show password'}
-              >
-                {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
-            </div>
-            {/* Strength bar */}
-            {strength && (
-              <div style={{ marginTop: '0.5rem' }}>
-                <div style={{ height: 4, background: 'var(--warm-gray-100)', borderRadius: 4, overflow: 'hidden' }}>
-                  <div style={{
-                    height: '100%',
-                    width: strength.level === 'weak' ? '33%' : strength.level === 'medium' ? '66%' : '100%',
-                    background: strength.color,
-                    borderRadius: 4,
-                    transition: 'width 0.3s ease, background 0.3s ease',
-                  }} />
+            <div className="space-y-4">
+              <div className="auth-benefit">
+                <span />
+                <div>
+                  <strong>Smart collaboration</strong>
+                  <div>Real-time conversation and quick access to project rooms.</div>
                 </div>
-                <p style={{ fontSize: '0.72rem', color: strength.color, marginTop: '0.2rem', fontWeight: 600 }}>
-                  {strength.label} password
-                </p>
+              </div>
+              <div className="auth-benefit">
+                <span />
+                <div>
+                  <strong>Secure access</strong>
+                  <div>Strong password guidance and safe account handling.</div>
+                </div>
+              </div>
+              <div className="auth-benefit">
+                <span />
+                <div>
+                  <strong>Designed for learners</strong>
+                  <div>Simplified onboarding with a clean, distraction-free interface.</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="auth-note">
+              Have an account?{' '}
+              <Link to="/login" className="font-semibold text-saffron-700 hover:underline">
+                Sign in instead
+              </Link>
+            </div>
+          </section>
+
+          <div className="auth-panel">
+            <div className="auth-form-header">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-2xl bg-saffron-50 flex items-center justify-center text-saffron-600">
+                  <Flame size={18} />
+                </div>
+                <span className="text-xs uppercase tracking-[0.2em] text-saffron-700">SyncMate</span>
+              </div>
+              <h2 className="text-3xl font-semibold text-slate-900">Create your account</h2>
+              <p className="text-sm text-slate-600">Join thousands of students & developers in a smarter learning community.</p>
+            </div>
+
+            {error && (
+              <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
+                <AlertCircle size={16} />
+                {error}
               </div>
             )}
+
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="full_name">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    id="full_name"
+                    name="full_name"
+                    type="text"
+                    className="form-input"
+                    placeholder="Alex Morgan"
+                    value={form.full_name}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="username">
+                  Username
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">@</span>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    className="form-input"
+                    placeholder="alexmorgan"
+                    value={form.username}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="email">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className="form-input"
+                    placeholder="you@example.com"
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="password">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPass ? 'text' : 'password'}
+                    className="form-input pr-11"
+                    placeholder="Min 8 characters"
+                    value={form.password}
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {strength && (
+                  <div className="mt-3">
+                    <div className="flex gap-1 h-1.5 w-full rounded-full overflow-hidden bg-slate-100">
+                      <div className={`h-full ${strength.color} transition-all duration-300`} style={{ width: strength.level === 'weak' ? '33%' : strength.level === 'medium' ? '66%' : '100%' }}></div>
+                    </div>
+                    <p className={`text-xs mt-2 font-medium ${strength.text}`}>{strength.label} password</p>
+                  </div>
+                )}
+              </div>
+
+              <button type="submit" disabled={loading} className="btn-primary">
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  'Create account'
+                )}
+              </button>
+            </form>
+
+            <p className="text-center text-sm text-slate-500">
+              Already have an account?{' '}
+              <Link to="/login" className="font-semibold text-saffron-700 hover:underline">
+                Sign in
+              </Link>
+            </p>
+
+            <div className="text-center text-xs text-slate-400 italic">योगः कर्मसु कौशलम् — Excellence in action</div>
           </div>
-
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading}
-            id="register-submit-btn"
-          >
-            {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                <span className="loading-spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
-                Creating account...
-              </span>
-            ) : 'Create Account'}
-          </button>
-        </form>
-
-        <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Already have an account?{' '}
-          <Link to="/login" style={{ color: 'var(--saffron-600)', fontWeight: 600, textDecoration: 'none' }}>
-            Sign in
-          </Link>
-        </p>
-
-        <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'serif', fontSize: '0.8rem', color: 'var(--saffron-600)', fontWeight: 600 }}>
-            योगः कर्मसु कौशलम्
-          </p>
-          <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '0.15rem' }}>
-            Excellence in action · Bhagavad Gita 2.50
-          </p>
         </div>
       </div>
     </div>

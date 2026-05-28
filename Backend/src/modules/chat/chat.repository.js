@@ -116,9 +116,12 @@ export const updateLastMessage = async(connection, conversationId, messageId)=>{
 export const findMessageById = async(messageId)=>{
     const [rows] = await connectionPool.execute(
         `
-        SELECT *
-        FROM messages
-        WHERE id = ?
+        SELECT m.id, m.content, m.message_type, m.created_at,
+               m.sender_id, m.conversation_id,
+               u.username, u.avatar_url
+        FROM messages m
+        JOIN users u ON u.id = m.sender_id
+        WHERE m.id = ?
         `,
         [messageId]
     );
@@ -141,17 +144,76 @@ export const getConversationMessages = async(conversationId)=>{
 
     return rows;
 };
+
+/**
+ * Returns all conversations for a user with participants and last message.
+ * Uses two simple queries instead of JSON_ARRAYAGG (better MySQL compatibility).
+ */
 export const getUserConversations = async(userId)=>{
-    const [rows] = await connectionPool.execute(
+    // Step 1: Get all conversations with last message info
+    const [convRows] = await connectionPool.execute(
         `
-        SELECT c.id, c.type, c.group_name, c.group_avatar, 
-        c.last_message_id, c.created_at FROM conversations c
+        SELECT
+            c.id,
+            c.type,
+            c.group_name,
+            c.group_avatar,
+            c.created_at,
+            m.content        AS last_message,
+            m.created_at     AS last_message_time,
+            sender.username  AS last_sender_name
+        FROM conversations c
         JOIN conversation_participants cp ON cp.conversation_id = c.id
+        LEFT JOIN messages m      ON m.id = c.last_message_id
+        LEFT JOIN users sender    ON sender.id = m.sender_id
         WHERE cp.user_id = ?
-        ORDER BY c.created_at DESC
+        ORDER BY COALESCE(m.created_at, c.created_at) DESC
         `,
         [userId]
     );
 
-    return rows;
+    if (convRows.length === 0) return [];
+
+    // Step 2: Get all participants for these conversations in one query
+    const convIds = convRows.map(r => r.id);
+    const placeholders = convIds.map(() => '?').join(',');
+
+    const [partRows] = await connectionPool.execute(
+        `
+        SELECT cp.conversation_id, u.id, u.username, u.full_name, u.avatar_url
+        FROM conversation_participants cp
+        JOIN users u ON u.id = cp.user_id
+        WHERE cp.conversation_id IN (${placeholders})
+        `,
+        convIds
+    );
+
+    // Step 3: Group participants by conversation_id
+    const participantMap = {};
+    partRows.forEach(p => {
+        if (!participantMap[p.conversation_id]) participantMap[p.conversation_id] = [];
+        participantMap[p.conversation_id].push({
+            id: p.id,
+            username: p.username,
+            full_name: p.full_name,
+            avatar_url: p.avatar_url,
+        });
+    });
+
+    // Step 4: Merge
+    return convRows.map(conv => ({
+        ...conv,
+        participants: participantMap[conv.id] || [],
+    }));
+};
+
+/**
+ * Returns all conversation IDs a user is part of (for socket room joining).
+ */
+export const getUserConversationIds = async(userId)=>{
+    const [rows] = await connectionPool.execute(
+        `SELECT conversation_id FROM conversation_participants WHERE user_id = ?`,
+        [userId]
+    );
+    return rows.map(r => r.conversation_id);
 };

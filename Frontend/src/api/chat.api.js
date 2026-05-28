@@ -1,9 +1,9 @@
 import axiosInstance from './axios.js';
 
-export const createDirectConversation = async(targetUserId)=>{
+export const createDirectConversation = async(data)=>{
     const response = await axiosInstance.post(
         '/api/chat/direct',
-        {targetUserId}
+        data
     );
 
     return response.data;
@@ -19,6 +19,10 @@ export const getUserConversations = async()=>{
 };
 
 
+export const sendMessageHttp = async(conversationId, content)=>{
+    const response = await axiosInstance.post('/api/chat/message', { conversationId, content });
+    return response.data;
+};
 
 
 export const getConversationMessages = async(conversationId)=>{
@@ -27,4 +31,4 @@ export const getConversationMessages = async(conversationId)=>{
     );
 
     return response.data;
-};
+};

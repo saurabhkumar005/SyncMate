@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import Navbar from './Navbar.jsx';
 import TopBar from './TopBar.jsx';
-import { ChatProvider } from '../../context/ChatContext.jsx';
 
 export default function AppLayout({ children }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -12,23 +11,21 @@ export default function AppLayout({ children }) {
   const closeNav = useCallback(() => setMobileNavOpen(false), []);
 
   return (
-    <ChatProvider>
-      <div className="app-layout">
-        {/* Left Navbar */}
-        <Navbar isMobileOpen={mobileNavOpen} onMobileClose={closeNav} />
+    <div className="app-layout">
+      {/* Left Navbar */}
+      <Navbar isMobileOpen={mobileNavOpen} onMobileClose={closeNav} />
 
-        {/* Right: topbar + main content */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
-          <TopBar onMenuClick={openNav} />
-          <main
-            style={{ flex: 1, display: 'flex', overflow: 'hidden' }}
-            role="main"
-            aria-label="Main content"
-          >
-            {children}
-          </main>
-        </div>
+      {/* Right: topbar + main content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
+        <TopBar onMenuClick={openNav} />
+        <main
+          style={{ flex: 1, display: 'flex', overflow: 'hidden' }}
+          role="main"
+          aria-label="Main content"
+        >
+          {children}
+        </main>
       </div>
-    </ChatProvider>
+    </div>
   );
 }

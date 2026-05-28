@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users(
     phone_number VARCHAR(20),
     password VARCHAR(255) NOT NULL,
     avatar_url TEXT,
-    profession ENUM('student','teacher','developer','professional') NOT NULL DEFAULT 'developer',
+    profession ENUM('student','teacher','developer','professional')  DEFAULT 'developer',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

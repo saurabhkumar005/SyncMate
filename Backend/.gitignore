@@ -9,7 +9,7 @@ node_modules/
 # CRITICAL: Contains DB passwords, JWT Secrets, Cloudinary API Keys
 .env
 .env*.local
-
+.env.docker
 # =========================
 # TEMPORARY UPLOADS (Multer)
 # =========================

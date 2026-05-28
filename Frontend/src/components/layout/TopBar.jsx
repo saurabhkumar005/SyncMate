@@ -58,19 +58,7 @@ export default function TopBar({ onMenuClick }) {
       {/* Spacer */}
       <div style={{ flex: 1 }} />
 
-      {/* Notification buttons */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <button className="notification-btn" aria-label="Notifications">
-          <Bell size={18} strokeWidth={1.8} />
-          <span className="notification-count">3</span>
-        </button>
-
-        <button className="notification-btn" aria-label="Messages">
-          <MessageCircle size={18} strokeWidth={1.8} />
-          <span className="notification-count">8</span>
-        </button>
-
-        {/* User menu */}
         <button className="user-menu-btn" aria-label="User menu" aria-haspopup="true">
           <UserAvatar user={user} size="sm" showStatus status="online" />
           <div style={{ textAlign: 'left' }}>
