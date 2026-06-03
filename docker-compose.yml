@@ -6,8 +6,8 @@ services:
       - "5173:80"
     depends_on:
       - backend
-    env_file:
-      - ./Frontend/.env
+    environment: 
+      VITE_SERVER_URL: ${VITE_SERVER_URL}
     volumes:
       - ./Frontend:/app
 
@@ -15,14 +15,18 @@ services:
     build: ./Backend
     ports:
       - "8080:8080"
-    env_file:
-      - ./Backend/.env.docker
     environment:
       DB_HOST: mysql
+      PORT: ${PORT}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       - mysql
     volumes:
-      - ./Backend:./app
+      - ./Backend:/app
   
   mysql:
     image: mysql:8
