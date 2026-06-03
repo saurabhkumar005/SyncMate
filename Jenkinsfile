@@ -60,7 +60,6 @@ pipeline {
                 sh 'docker push $BACKEND_IMAGE:latest'
             }
         }
-
         stage('Show Docker Images') {
             steps {
                 sh 'docker images'
