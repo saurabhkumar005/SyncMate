@@ -14,6 +14,11 @@ const connectionPool = mysql.createPool({
     port: process.env.DB_PORT,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    //applying ssl for mysql deployement on aiven
+     ssl: {
+        rejectUnauthorized: false
+    },
+
     waitForConnections: true,  //pool will allow request's wait for connection if no connection is free right now 
     connectionLimit: 20, //max number of already  availble connection ready to handle DB operation directly in pool , 
     // means that much only request can be hanled at single time, after that any request had to wait to get any connection free
