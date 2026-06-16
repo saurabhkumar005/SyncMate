@@ -23,24 +23,24 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       JWT_SECRET: ${JWT_SECRET}
-    depends_on:
-      - mysql
+    # depends_on:
+    #   - mysql
     volumes:
       - ./Backend:/app
-  
-  mysql:
-    image: mysql:8
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./Backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+  #mysql deployed on aiven will be used inside containers to access live data and app
+  # mysql:
+  #   image: mysql:8
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${DB_NAME}
+  #     MYSQL_USER: ${DB_USER}
+  #     MYSQL_PASSWORD: ${DB_PASSWORD}
+  #   ports:
+  #     - "3307:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     - ./Backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   mysql_data:
