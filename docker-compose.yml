@@ -16,7 +16,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_HOST: mysql
+      # DB_HOST: mysql
+      DB_HOST: ${DB_HOST}
       PORT: ${PORT}
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
@@ -42,5 +43,5 @@ services:
   #     - mysql_data:/var/lib/mysql
   #     - ./Backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-volumes:
-  mysql_data:
+# volumes:
+#   mysql_data:
