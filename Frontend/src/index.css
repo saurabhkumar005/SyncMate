@@ -1290,6 +1290,7 @@ body {
   width: 0;
   opacity: 0;
   border-left: none;
+  pointer-events: none;  /* never block clicks when invisible */
 }
 
 .details-panel.open {
@@ -2307,23 +2308,21 @@ body {
     animation: fadeIn 0.2s ease;
   }
 
-  /* Chat list: full-screen panel */
+  /* Chat list: full-screen panel on mobile */
   .chat-list-panel {
     position: fixed;
     inset: 0;
-    z-index: 20;
+    z-index: 25;  /* above topbar (15) and details-panel-closed */
     width: 100% !important;
   }
-  .chat-list-panel.hidden-mobile { display: none !important; }
 
-  /* Chat window: full-screen */
+  /* Chat window: full-screen on mobile */
   .chat-window {
     position: fixed;
     inset: 0;
-    z-index: 20;
+    z-index: 25;
     width: 100%;
   }
-  .chat-window.hidden-mobile { display: none !important; }
 
   /* Details panel: full-width overlay */
   .details-panel {
