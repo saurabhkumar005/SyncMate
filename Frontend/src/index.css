@@ -1682,6 +1682,7 @@ body {
   border-bottom: 1px solid var(--border-subtle);
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
+  position: relative;  /* needed for mobile search overlay */
 }
 
 .top-search {
@@ -1910,7 +1911,317 @@ body {
 .fw-700 { font-weight: 700; }
 
 /* ============================================
-   RESPONSIVE — MOBILE & TABLET
+   AUTH PAGE — NEW RESPONSIVE CLASSES
+   (replaces old Tailwind grid classes)
+============================================ */
+
+/* Two-column grid: left aside + right form */
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* Brand row at top of form */
+.auth-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.auth-brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(249,115,22,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--saffron-600);
+}
+.auth-brand-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--saffron-700);
+  font-weight: 700;
+}
+
+/* Titles */
+.auth-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+.auth-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Error alert */
+.auth-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.auth-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+.auth-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.auth-input-wrap {
+  position: relative;
+}
+.auth-input-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.auth-eye-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: flex-end;
+}
+.auth-eye-btn:hover { color: #475569; }
+
+/* Forgot password — large tap target */
+.auth-forgot-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--saffron-700);
+  padding: 0.5rem 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.auth-forgot-btn:hover { text-decoration: underline; }
+
+/* Spinner inside btn */
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+/* Bottom links */
+.auth-switch-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+.auth-link {
+  font-weight: 600;
+  color: var(--saffron-700);
+  text-decoration: none;
+}
+.auth-link:hover { text-decoration: underline; }
+
+.auth-quote {
+  text-align: center;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+/* Aside top row */
+.auth-aside-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.auth-logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f97316, #ea6f0a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-saffron);
+}
+
+.auth-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================
+   TOP BAR — NEW RESPONSIVE CLASSES
+============================================ */
+.top-bar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.top-bar-brand {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+/* User name text — hidden on small screens */
+.user-menu-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* Mobile expanded search bar */
+.top-search-expanded {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.top-search-expanded input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+/* ============================================
+   EMOJI PICKER — CSS CLASS (responsive)
+============================================ */
+.emoji-picker {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 1rem;
+  right: 1rem;           /* bounded on right so it never clips */
+  max-width: 300px;
+  background: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.2rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 30;
+  animation: slideUp 0.2s ease;
+}
+
+.emoji-btn {
+  font-size: 1.15rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  transition: background 0.1s, transform 0.1s;
+  min-width: 44px;    /* touch-friendly on mobile */
+  min-height: 44px;  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emoji-btn:hover {
+  background: var(--warm-gray-100);
+  transform: scale(1.2);
+}
+
+/* ============================================
+   RESPONSIVE — LARGE DESKTOP (1440px+)
+   Prevent extreme stretching on wide monitors
+============================================ */
+@media (min-width: 1440px) {
+  /* The app shell itself doesn't need a max-width
+     because it's a full-screen app, but we can
+     constrain the chat list and details panel */
+  .chat-list-panel {
+    width: 340px;
+  }
+}
+
+@media (min-width: 1920px) {
+  /* On very wide screens, cap the chat list + details widths */
+  .chat-list-panel {
+    width: 380px;
+  }
+  .details-panel.open {
+    width: 360px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — TABLET LANDSCAPE (900px–1024px)
+   Two-pane layout, no details panel by default
 ============================================ */
 @media (max-width: 1024px) {
   .details-panel {
@@ -1921,11 +2232,53 @@ body {
     z-index: 40;
     box-shadow: var(--shadow-xl);
   }
+
+  /* Slightly narrower chat list on tablets */
+  .chat-list-panel {
+    width: 280px;
+  }
 }
 
+/* ============================================
+   RESPONSIVE — TABLET PORTRAIT (640px–768px)
+   Navbar still hidden, chat list still visible
+============================================ */
+@media (max-width: 900px) and (min-width: 641px) {
+  /* Collapse chat list a bit to give more room */
+  .chat-list-panel {
+    width: 240px;
+  }
+
+  /* Tighten TopBar */
+  .top-bar {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  /* Hide user name text in TopBar, keep only avatar */
+  .user-menu-text {
+    display: none;
+  }
+
+  .user-menu-btn {
+    padding: 0.35rem;
+    border-radius: var(--radius-full);
+  }
+
+  /* Hide top-bar brand text if space is tight */
+  .top-bar-brand {
+    display: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE (≤768px)
+   Full single-column experience
+============================================ */
 @media (max-width: 768px) {
   body { overflow: hidden; }
 
+  /* Navbar becomes a slide-in drawer */
   .navbar {
     position: fixed;
     top: 0;
@@ -1936,17 +2289,16 @@ body {
     transition: transform var(--transition-slow), width var(--transition-slow);
     box-shadow: var(--shadow-xl);
   }
-
   .navbar.mobile-open {
     transform: translateX(0);
     width: var(--navbar-expanded) !important;
   }
-
   .navbar.collapsed,
   .navbar.expanded {
     width: var(--navbar-expanded);
   }
 
+  /* Backdrop behind open navbar */
   .mobile-overlay {
     position: fixed;
     inset: 0;
@@ -1955,41 +2307,196 @@ body {
     animation: fadeIn 0.2s ease;
   }
 
+  /* Chat list: full-screen panel */
   .chat-list-panel {
     position: fixed;
     inset: 0;
     z-index: 20;
     width: 100% !important;
   }
+  .chat-list-panel.hidden-mobile { display: none !important; }
 
-  .chat-list-panel.hidden-mobile {
-    display: none;
-  }
-
+  /* Chat window: full-screen */
   .chat-window {
     position: fixed;
     inset: 0;
     z-index: 20;
     width: 100%;
   }
+  .chat-window.hidden-mobile { display: none !important; }
 
-  .chat-window.hidden-mobile {
-    display: none;
-  }
-
+  /* Details panel: full-width overlay */
   .details-panel {
     width: 100% !important;
   }
 
+  /* TopBar: sticky at top */
   .top-bar {
     position: sticky;
     top: 0;
     z-index: 15;
+    padding: 0 0.75rem;
+    gap: 0.5rem;
+    height: 54px;
   }
 
-  .top-search {
-    max-width: none;
+  /* Hide user name text in top bar on mobile */
+  .user-menu-text {
+    display: none;
   }
+  .user-menu-btn {
+    padding: 0.3rem;
+    border-radius: var(--radius-full);
+    border: none;
+    background: transparent;
+  }
+
+  /* Hide desktop search bar */
+  .top-search.desktop-only {
+    display: none !important;
+  }
+
+  /* TopBar brand text — hide on very small phones if needed */
+  .top-bar-brand {
+    font-size: 0.95rem;
+  }
+
+  /* Chat list tighter padding */
+  .chat-list-header {
+    padding: 0.85rem 1rem 0.6rem;
+  }
+  .chat-list-title {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+  .chat-item {
+    padding: 0.7rem 1rem;
+  }
+  .filter-tabs {
+    padding: 0.6rem 1rem;
+  }
+
+  /* Message input — better touch targets */
+  .message-input-area {
+    padding: 0.6rem 0.85rem 0.75rem;
+  }
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .send-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Auth pages: stack to single column */
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Hide left aside entirely on mobile */
+  .auth-aside {
+    display: none;
+  }
+  .auth-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: var(--radius-xl);
+    max-width: 100%;
+    width: 100%;
+  }
+  .auth-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+  .auth-title {
+    font-size: 1.6rem;
+  }
+
+  /* Emoji picker: full width on mobile, smaller grid */
+  .emoji-picker {
+    left: 0.5rem;
+    right: 0.5rem;
+    max-width: none;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .emoji-btn {
+    font-size: 1.3rem;
+    min-width: unset;
+    min-height: 40px;
+  }
+
+  /* Toast: full width on mobile */
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  .toast {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — SMALL PHONES (≤480px)
+   iPhone SE, Galaxy A series
+============================================ */
+@media (max-width: 480px) {
+  html { font-size: 14px; }
+
+  .top-bar {
+    height: 50px;
+    gap: 0.35rem;
+    padding: 0 0.6rem;
+  }
+
+  /* Brand text disappears on very small phones to save space */
+  .top-bar-brand {
+    display: none;
+  }
+
+  /* Slightly bigger bubble max-width on small screens */
+  .message-input-area {
+    padding: 0.5rem 0.65rem 0.65rem;
+  }
+
+  /* Auth: even tighter padding */
+  .auth-card {
+    padding: 1.25rem 1rem;
+  }
+  .auth-title {
+    font-size: 1.45rem;
+  }
+
+  /* Chat header action buttons — reduce to essentials */
+  .chat-header-actions .icon-btn:not([aria-label="Details"]):not([aria-label="Back"]) {
+    display: none;
+  }
+
+  /* Compact filter tabs */
+  .filter-tab {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.72rem;
+  }
+}
+
+/* ============================================
+   TOUCH / MOBILE SCROLL IMPROVEMENTS
+============================================ */
+.chat-list {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+.messages-area, .details-body, .navbar-nav {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Prevent text size inflation on orientation change (iOS) */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ============================================
@@ -2001,19 +2508,13 @@ body {
   border-radius: 4px;
 }
 
-/* ============================================
-   SMOOTH TRANSITIONS EVERYWHERE
-============================================ */
+/* Smooth transitions everywhere */
 button, a, [role="button"] {
   transition: all var(--transition-base);
 }
-
-/* Remove default button styles */
 button { font-family: inherit; }
 
-/* ============================================
-   SELECTION COLOR
-============================================ */
+/* Selection color */
 ::selection {
   background: rgba(249, 115, 22, 0.2);
   color: var(--text-primary);
@@ -2025,20 +2526,10 @@ button { font-family: inherit; }
 .mobile-only {
   display: none !important;
 }
-
 @media (max-width: 768px) {
-  .mobile-only {
-    display: flex !important;
-  }
-  .desktop-only {
-    display: none !important;
-  }
+  .mobile-only  { display: flex !important; }
+  .desktop-only { display: none !important; }
 }
-
-/* Hidden on mobile for panel transitions */
 @media (max-width: 768px) {
-  .hidden-mobile {
-    display: none !important;
-  }
+  .hidden-mobile { display: none !important; }
 }
-

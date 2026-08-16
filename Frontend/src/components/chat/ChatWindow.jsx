@@ -126,7 +126,7 @@ export default function ChatWindow({ onInfoClick, onBack, showBack = false }) {
         </div>
 
         {/* Actions */}
-        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+        <div className="chat-header-actions" style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
           {[
             { Icon: Search, label: 'Search' },
             { Icon: Phone,  label: 'Call' },

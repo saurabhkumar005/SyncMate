@@ -80,44 +80,13 @@ export default function MessageInput() {
       {showEmojis && (
         <div
           id="emoji-picker"
-          style={{
-            position: 'absolute',
-            bottom: 'calc(100% + 8px)',
-            left: '1.25rem',
-            background: 'white',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-lg)',
-            padding: '0.75rem',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(10, 1fr)',
-            gap: '0.25rem',
-            boxShadow: 'var(--shadow-lg)',
-            zIndex: 20,
-            animation: 'slideUp 0.2s ease',
-          }}
+          className="emoji-picker"
         >
           {EMOJI_LIST.map((emoji) => (
             <button
               key={emoji}
               onClick={() => addEmoji(emoji)}
-              style={{
-                fontSize: '1.2rem',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '0.2rem',
-                borderRadius: 'var(--radius-sm)',
-                transition: 'background 0.1s, transform 0.1s',
-                lineHeight: 1,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--warm-gray-100)';
-                e.currentTarget.style.transform = 'scale(1.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'none';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
+              className="emoji-btn"
               aria-label={emoji}
             >
               {emoji}
