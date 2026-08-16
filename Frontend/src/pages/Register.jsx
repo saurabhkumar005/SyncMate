@@ -7,7 +7,6 @@ import { registerUser } from '../api/auth.api.js';
 export default function Register() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  // Backend requires full_name, username, email, password
   const [form, setForm] = useState({ full_name: '', username: '', email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,9 +20,9 @@ export default function Register() {
   const passwordStrength = () => {
     const p = form.password;
     if (p.length === 0) return null;
-    if (p.length < 6) return { level: 'weak', color: 'bg-red-500', text: 'text-red-500', label: 'Weak' };
-    if (p.length < 10) return { level: 'medium', color: 'bg-amber-500', text: 'text-amber-500', label: 'Medium' };
-    return { level: 'strong', color: 'bg-green-500', text: 'text-green-500', label: 'Strong' };
+    if (p.length < 6) return { level: 'weak',   color: '#ef4444', label: 'Weak',   pct: '33%' };
+    if (p.length < 10) return { level: 'medium', color: '#f59e0b', label: 'Medium', pct: '66%' };
+    return              { level: 'strong',  color: '#22c55e', label: 'Strong',  pct: '100%' };
   };
   const strength = passwordStrength();
 
@@ -54,85 +53,73 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr]">
+        <div className="auth-grid">
+
+          {/* Left aside — hidden on mobile, shown on lg+ */}
           <section className="auth-aside">
-            <div className="flex items-center justify-between gap-3">
+            <div className="auth-aside-top">
               <div>
                 <p className="auth-highlight">New account</p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-saffron-500 to-saffron-600 flex items-center justify-center text-white shadow-saffron">
+              <div className="auth-logo-icon">
                 <Flame size={24} strokeWidth={2.5} />
               </div>
             </div>
 
             <div>
               <h3>Create your SyncMate workspace</h3>
-              <p>Build study groups, share ideas, and chat with your team in one polished workspace designed for learners.
-              </p>
+              <p>Build study groups, share ideas, and chat with your team in one polished workspace designed for learners.</p>
             </div>
 
-            <div className="space-y-4">
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Smart collaboration</strong>
-                  <div>Real-time conversation and quick access to project rooms.</div>
+            <div className="auth-benefits">
+              {[
+                { title: 'Smart collaboration', desc: 'Real-time conversation and quick access to project rooms.' },
+                { title: 'Secure access',        desc: 'Strong password guidance and safe account handling.' },
+                { title: 'Designed for learners',desc: 'Simplified onboarding with a clean, distraction-free interface.' },
+              ].map((b) => (
+                <div key={b.title} className="auth-benefit">
+                  <span />
+                  <div>
+                    <strong>{b.title}</strong>
+                    <div>{b.desc}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Secure access</strong>
-                  <div>Strong password guidance and safe account handling.</div>
-                </div>
-              </div>
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Designed for learners</strong>
-                  <div>Simplified onboarding with a clean, distraction-free interface.</div>
-                </div>
-              </div>
+              ))}
             </div>
 
             <div className="auth-note">
               Have an account?{' '}
-              <Link to="/login" className="font-semibold text-saffron-700 hover:underline">
-                Sign in instead
-              </Link>
+              <Link to="/login" className="auth-link">Sign in instead</Link>
             </div>
           </section>
 
+          {/* Right form panel */}
           <div className="auth-panel">
             <div className="auth-form-header">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-2xl bg-saffron-50 flex items-center justify-center text-saffron-600">
+              <div className="auth-brand-row">
+                <div className="auth-brand-icon">
                   <Flame size={18} />
                 </div>
-                <span className="text-xs uppercase tracking-[0.2em] text-saffron-700">SyncMate</span>
+                <span className="auth-brand-label">SyncMate</span>
               </div>
-              <h2 className="text-3xl font-semibold text-slate-900">Create your account</h2>
-              <p className="text-sm text-slate-600">Join thousands of students & developers in a smarter learning community.</p>
+              <h2 className="auth-title">Create your account</h2>
+              <p className="auth-subtitle">Join thousands of students &amp; developers in a smarter learning community.</p>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
-                <AlertCircle size={16} />
+              <div className="auth-error">
+                <AlertCircle size={16} style={{ flexShrink: 0 }} />
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="full_name">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <form onSubmit={handleSubmit} className="auth-form" noValidate>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="full_name">Full Name</label>
+                <div className="auth-input-wrap">
+                  <User size={18} className="auth-input-icon" />
                   <input
-                    id="full_name"
-                    name="full_name"
-                    type="text"
+                    id="full_name" name="full_name" type="text"
                     className="form-input"
                     placeholder="Alex Morgan"
                     value={form.full_name}
@@ -141,16 +128,12 @@ export default function Register() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="username">
-                  Username
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">@</span>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="username">Username</label>
+                <div className="auth-input-wrap">
+                  <span className="auth-input-icon" style={{ fontWeight: 600, fontSize: '1rem' }}>@</span>
                   <input
-                    id="username"
-                    name="username"
-                    type="text"
+                    id="username" name="username" type="text"
                     className="form-input"
                     placeholder="alexmorgan"
                     value={form.username}
@@ -159,16 +142,12 @@ export default function Register() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="email">
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="email">Email</label>
+                <div className="auth-input-wrap">
+                  <Mail size={18} className="auth-input-icon" />
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
+                    id="email" name="email" type="email"
                     className="form-input"
                     placeholder="you@example.com"
                     value={form.email}
@@ -177,17 +156,15 @@ export default function Register() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="password">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="password">Password</label>
+                <div className="auth-input-wrap">
+                  <Lock size={18} className="auth-input-icon" />
                   <input
-                    id="password"
-                    name="password"
+                    id="password" name="password"
                     type={showPass ? 'text' : 'password'}
-                    className="form-input pr-11"
+                    className="form-input"
+                    style={{ paddingRight: '2.75rem' }}
                     placeholder="Min 8 characters"
                     value={form.password}
                     onChange={handleChange}
@@ -195,38 +172,42 @@ export default function Register() {
                   <button
                     type="button"
                     onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="auth-eye-btn"
+                    aria-label={showPass ? 'Hide password' : 'Show password'}
                   >
                     {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
                 {strength && (
-                  <div className="mt-3">
-                    <div className="flex gap-1 h-1.5 w-full rounded-full overflow-hidden bg-slate-100">
-                      <div className={`h-full ${strength.color} transition-all duration-300`} style={{ width: strength.level === 'weak' ? '33%' : strength.level === 'medium' ? '66%' : '100%' }}></div>
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <div style={{
+                      height: 5, borderRadius: 99, background: '#e2e8f0', overflow: 'hidden',
+                    }}>
+                      <div style={{
+                        height: '100%', width: strength.pct,
+                        background: strength.color,
+                        borderRadius: 99,
+                        transition: 'width 0.3s ease',
+                      }} />
                     </div>
-                    <p className={`text-xs mt-2 font-medium ${strength.text}`}>{strength.label} password</p>
+                    <p style={{ fontSize: '0.75rem', marginTop: '0.3rem', fontWeight: 600, color: strength.color }}>
+                      {strength.label} password
+                    </p>
                   </div>
                 )}
               </div>
 
               <button type="submit" disabled={loading} className="btn-primary">
-                {loading ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                ) : (
-                  'Create account'
-                )}
+                {loading ? <div className="btn-spinner" /> : 'Create account'}
               </button>
             </form>
 
-            <p className="text-center text-sm text-slate-500">
+            <p className="auth-switch-text">
               Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-saffron-700 hover:underline">
-                Sign in
-              </Link>
+              <Link to="/login" className="auth-link">Sign in</Link>
             </p>
 
-            <div className="text-center text-xs text-slate-400 italic">योगः कर्मसु कौशलम् — Excellence in action</div>
+            <div className="auth-quote">योगः कर्मसु कौशलम् — Excellence in action</div>
           </div>
         </div>
       </div>

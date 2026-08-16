@@ -7,8 +7,6 @@ import { loginUser } from '../api/auth.api.js';
 export default function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  // We can use either email or username, backend allows identifier 'email' | 'username'
-  // and 'password'
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,13 +40,16 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+        {/* Two-column on lg+, single column on smaller screens */}
+        <div className="auth-grid">
+
+          {/* Left aside — hidden on mobile, visible on lg+ */}
           <section className="auth-aside">
-            <div className="flex items-center justify-between gap-3">
+            <div className="auth-aside-top">
               <div>
                 <p className="auth-highlight">Welcome back</p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-saffron-500 to-saffron-600 flex items-center justify-center text-white shadow-saffron">
+              <div className="auth-logo-icon">
                 <Flame size={24} strokeWidth={2.5} />
               </div>
             </div>
@@ -58,64 +59,57 @@ export default function Login() {
               <p>Reconnect with your study circle, resume active chats, and continue collaborating with a clean workspace.</p>
             </div>
 
-            <div className="space-y-4">
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Quick access</strong>
-                  <div>Jump directly into your chat rooms and teammates.</div>
+            <div className="auth-benefits">
+              {[
+                { title: 'Quick access', desc: 'Jump directly into your chat rooms and teammates.' },
+                { title: 'Secure sign in', desc: 'Encrypted auth and modern password controls.' },
+                { title: 'Focused workspace', desc: 'Minimal distractions and clear navigation.' },
+              ].map((b) => (
+                <div key={b.title} className="auth-benefit">
+                  <span />
+                  <div>
+                    <strong>{b.title}</strong>
+                    <div>{b.desc}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Secure sign in</strong>
-                  <div>Encrypted auth and modern password controls.</div>
-                </div>
-              </div>
-              <div className="auth-benefit">
-                <span />
-                <div>
-                  <strong>Focused workspace</strong>
-                  <div>Minimal distractions and clear navigation.</div>
-                </div>
-              </div>
+              ))}
             </div>
 
             <div className="auth-note">
               New to SyncMate?{' '}
-              <Link to="/register" className="font-semibold text-saffron-700 hover:underline">
+              <Link to="/register" className="auth-link">
                 Create an account
               </Link>
             </div>
           </section>
 
+          {/* Right form panel */}
           <div className="auth-panel">
             <div className="auth-form-header">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-2xl bg-saffron-50 flex items-center justify-center text-saffron-600">
+              <div className="auth-brand-row">
+                <div className="auth-brand-icon">
                   <Flame size={18} />
                 </div>
-                <span className="text-xs uppercase tracking-[0.2em] text-saffron-700">SyncMate</span>
+                <span className="auth-brand-label">SyncMate</span>
               </div>
-              <h2 className="text-3xl font-semibold text-slate-900">Welcome back</h2>
-              <p className="text-sm text-slate-600">Sign in to continue to your workspace.</p>
+              <h2 className="auth-title">Welcome back</h2>
+              <p className="auth-subtitle">Sign in to continue to your workspace.</p>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
+              <div className="auth-error">
                 <AlertCircle size={16} />
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2" htmlFor="email">
+            <form onSubmit={handleSubmit} className="auth-form" noValidate>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="email">
                   Email or Username
                 </label>
-                <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <div className="auth-input-wrap">
+                  <Mail size={18} className="auth-input-icon" />
                   <input
                     id="email"
                     name="email"
@@ -129,25 +123,26 @@ export default function Login() {
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-slate-700" htmlFor="password">
+              <div className="auth-field">
+                <div className="auth-label-row">
+                  <label className="auth-label" htmlFor="password">
                     Password
                   </label>
                   <button
                     type="button"
-                    className="text-xs font-semibold text-saffron-700 hover:text-saffron-800 hover:underline"
+                    className="auth-forgot-btn"
                   >
                     Forgot password?
                   </button>
                 </div>
-                <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <div className="auth-input-wrap">
+                  <Lock size={18} className="auth-input-icon" />
                   <input
                     id="password"
                     name="password"
                     type={showPass ? 'text' : 'password'}
-                    className="form-input pr-11"
+                    className="form-input"
+                    style={{ paddingRight: '2.75rem' }}
                     placeholder="Enter your password"
                     value={form.password}
                     onChange={handleChange}
@@ -156,7 +151,8 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="auth-eye-btn"
+                    aria-label={showPass ? 'Hide password' : 'Show password'}
                   >
                     {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -165,21 +161,21 @@ export default function Login() {
 
               <button type="submit" disabled={loading} className="btn-primary">
                 {loading ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="btn-spinner" />
                 ) : (
                   'Sign in'
                 )}
               </button>
             </form>
 
-            <p className="text-center text-sm text-slate-500">
+            <p className="auth-switch-text">
               Don't have an account?{' '}
-              <Link to="/register" className="font-semibold text-saffron-700 hover:underline">
+              <Link to="/register" className="auth-link">
                 Create one free
               </Link>
             </p>
 
-            <div className="text-center text-xs text-slate-400 italic">योगः कर्मसु कौशलम् — Excellence in action</div>
+            <div className="auth-quote">योगः कर्मसु कौशलम् — Excellence in action</div>
           </div>
         </div>
       </div>

@@ -142,7 +142,7 @@ export default function Navbar({ isMobileOpen, onMobileClose }) {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
               }}>
-                {user?.name || user?.username || 'User'}
+                {user?.full_name || user?.username || 'User'}
               </div>
               <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                 {user?.role || 'Student'}
